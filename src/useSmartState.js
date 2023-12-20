@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
-import { EMPTY_ARRAY, EMPTY_OBJECT, isEmptyArray, isEmptyObject } from './common';
+import { isValueEmpty } from './common';
 
 /**
  * Custom hook for managing state with optimization for empty arrays and objects.
@@ -20,16 +20,11 @@ const useSmartState = (initialValue, options) => {
 
     const setSmartState = useCallback((newVal) => {
         setState((prev) => {
-            // If new value is also an empty array just like the last, return the same instance
-            if (isEmptyArray(newVal)) {
-                previousValueRef.current = EMPTY_ARRAY;
-                return EMPTY_ARRAY;
-            }
+            const emptyData = isValueEmpty(newVal, previousValueRef.current);
 
-            // If new value is also an empty object just like the last, return the same instance
-            if (isEmptyObject(newVal)) {
-                previousValueRef.current = EMPTY_OBJECT;
-                return EMPTY_OBJECT;
+            if (emptyData) {
+                previousValueRef.current = emptyData;
+                return emptyData;
             }
 
             if (options?.isEqual && options.isEqual(prev, newVal)) {

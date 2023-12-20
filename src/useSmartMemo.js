@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 
-import { EMPTY_ARRAY, EMPTY_OBJECT, isEmptyArray, isEmptyObject } from './common';
+import { isValueEmpty } from './common';
 
 /**
  * Custom hook that works like React's `useMemo`, but with additional optimizations.
@@ -32,13 +32,11 @@ const useSmartMemo = (factory, deps, options = {}) => {
 
     return useMemo(() => {
         const result = factory();
+        const emptyData = isValueEmpty(result, previousValueRef.current);
 
-        if (isEmptyArray(result)) {
-            return EMPTY_ARRAY;
-        }
-
-        if (isEmptyObject(result)) {
-            return EMPTY_OBJECT;
+        if (emptyData) {
+            previousValueRef.current = emptyData;
+            return emptyData;
         }
 
         // Perform deep equality check if provided in options
