@@ -12,6 +12,10 @@
 4. [Examples](#examples)
 5. [License](#license)
 
+## Demo
+
+See it in action [here](https://ragaeeb.github.io/use-smart-hooks).
+
 ## Installation
 
 To install `use-smart-hooks`, run the following command:
